@@ -38,9 +38,13 @@ Load< Scene > maze_scene(LoadTagDefault, []() -> Scene const * {
 
 bool PlayMode::ball_collides_wall(glm::vec3 world_ball_pos) {
 
+	if(!(-1.75 < world_ball_pos.x && world_ball_pos.x < 1.75 && -1.75 < world_ball_pos.y && world_ball_pos.y < 1.75)) {
+		return true;
+	}
+
 	for( Scene::Transform &transform: scene.transforms) {
 		
-		if (transform.name.substr(0, 4) == "Wall") {
+		if (transform.name.substr(0, 5) == "Wall.") {
 
 			Mesh const &wall = maze_meshes->lookup(transform.name);
       
