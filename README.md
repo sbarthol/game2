@@ -1,8 +1,8 @@
-# (TODO: your game's title)
+# Snowmaze
 
-Author: (TODO: your name)
+Author: Sacha Bartholme
 
-Design: (TODO: In two sentences or fewer, describe what is new and interesting about your game.)
+Design: The main character is a snowman consisting of a hierarchy of objects. Collisions with the walls were computed using bounding boxes of world coordinates.
 
 Screen Shot:
 
@@ -10,6 +10,6 @@ Screen Shot:
 
 How To Play:
 
-(TODO: describe the controls and (if needed) goals/strategy.)
+Find your way through the maze and get to the present. Use the arrows to navigate the snowman and WASD to move the camera.
 
 This game was built with [NEST](NEST.md).
