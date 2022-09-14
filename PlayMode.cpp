@@ -153,6 +153,10 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 }
 
 void PlayMode::update(float elapsed) {
+
+	if(win){
+		return;
+	}
 	
 	//move ball:
 	{
@@ -175,6 +179,12 @@ void PlayMode::update(float elapsed) {
 		glm::vec3 new_position = ball->position + move.x * frame_right + move.y * frame_forward;
 		if(!ball_collides_wall(new_position)) {
 			ball->position = new_position;
+		}
+	}
+
+	{
+		if(std::abs(ball->position.x + 1.58) < 0.1 && std::abs(ball->position.y-1.26) < 0.1) {
+			win = true;
 		}
 	}
 
