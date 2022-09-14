@@ -31,6 +31,7 @@ struct PlayMode : Mode {
 	Scene::Camera *camera = nullptr;
 
 	Scene::Transform *ball = nullptr;
+	Scene::Transform *present = nullptr;
 	bool win = false;
 
 	bool ball_collides_wall(glm::vec3 new_position);

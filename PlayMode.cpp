@@ -75,6 +75,7 @@ PlayMode::PlayMode() : scene(*maze_scene) {
 
 	for (auto &drawable : scene.drawables) {
 	 	if (drawable.transform->name == "Ball") ball = drawable.transform;
+		else if(drawable.transform->name == "Present") present = drawable.transform;
 	}
 
 	//get pointer to camera for convenience:
@@ -185,6 +186,7 @@ void PlayMode::update(float elapsed) {
 	{
 		if(std::abs(ball->position.x + 1.58) < 0.1 && std::abs(ball->position.y-1.26) < 0.1) {
 			win = true;
+			present->scale = glm::vec3(0,0,0);
 		}
 	}
 
@@ -250,12 +252,12 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		));
 
 		constexpr float H = 0.09f;
-		lines.draw_text("WASD moves the ball",
+		lines.draw_text("WASD moves the camera; arrows move the snowman",
 			glm::vec3(-aspect + 0.1f * H, -1.0 + 0.1f * H, 0.0),
 			glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
 			glm::u8vec4(0x00, 0x00, 0x00, 0x00));
 		float ofs = 2.0f / drawable_size.y;
-		lines.draw_text("WASD moves the ball",
+		lines.draw_text("WASD moves the camera; arrows move the snowman",
 			glm::vec3(-aspect + 0.1f * H + ofs, -1.0 + + 0.1f * H + ofs, 0.0),
 			glm::vec3(H, 0.0f, 0.0f), glm::vec3(0.0f, H, 0.0f),
 			glm::u8vec4(0xff, 0xff, 0xff, 0x00));
