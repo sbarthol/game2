@@ -88,38 +88,63 @@ PlayMode::~PlayMode() {
 bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size) {
 
 	if (evt.type == SDL_KEYDOWN) {
-		if (evt.key.keysym.sym == SDLK_ESCAPE) {
-			SDL_SetRelativeMouseMode(SDL_FALSE);
-			return true;
-		} else if (evt.key.keysym.sym == SDLK_a) {
+		if (evt.key.keysym.sym == SDLK_LEFT) {
 			left.downs += 1;
 			left.pressed = true;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_d) {
+		} else if (evt.key.keysym.sym == SDLK_RIGHT) {
 			right.downs += 1;
 			right.pressed = true;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_w) {
+		} else if (evt.key.keysym.sym == SDLK_UP) {
 			up.downs += 1;
 			up.pressed = true;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_s) {
+		} else if (evt.key.keysym.sym == SDLK_DOWN) {
 			down.downs += 1;
 			down.pressed = true;
 			return true;
-		}
-	} else if (evt.type == SDL_KEYUP) {
-		if (evt.key.keysym.sym == SDLK_a) {
-			left.pressed = false;
+		}else if (evt.key.keysym.sym == SDLK_a) {
+			a.downs += 1;
+			a.pressed = true;
 			return true;
 		} else if (evt.key.keysym.sym == SDLK_d) {
-			right.pressed = false;
+			d.downs += 1;
+			d.pressed = true;
 			return true;
 		} else if (evt.key.keysym.sym == SDLK_w) {
-			up.pressed = false;
+			w.downs += 1;
+			w.pressed = true;
 			return true;
 		} else if (evt.key.keysym.sym == SDLK_s) {
+			s.downs += 1;
+			s.pressed = true;
+			return true;
+		}
+	} else if (evt.type == SDL_KEYUP) {
+		if (evt.key.keysym.sym == SDLK_LEFT) {
+			left.pressed = false;
+			return true;
+		} else if (evt.key.keysym.sym == SDLK_RIGHT) {
+			right.pressed = false;
+			return true;
+		} else if (evt.key.keysym.sym == SDLK_UP) {
+			up.pressed = false;
+			return true;
+		} else if (evt.key.keysym.sym == SDLK_DOWN) {
 			down.pressed = false;
+			return true;
+		} else if (evt.key.keysym.sym == SDLK_a) {
+			a.pressed = false;
+			return true;
+		} else if (evt.key.keysym.sym == SDLK_d) {
+			d.pressed = false;
+			return true;
+		} else if (evt.key.keysym.sym == SDLK_w) {
+			w.pressed = false;
+			return true;
+		} else if (evt.key.keysym.sym == SDLK_s) {
+			s.pressed = false;
 			return true;
 		}
 	}
@@ -133,7 +158,7 @@ void PlayMode::update(float elapsed) {
 	{
 
 		//combine inputs into a move:
-		constexpr float BallSpeed = 30.0f;
+		constexpr float BallSpeed = 15.0f;
 		glm::vec2 move = glm::vec2(0.0f);
 		if (left.pressed && !right.pressed) move.x =-1.0f;
 		if (!left.pressed && right.pressed) move.x = 1.0f;
@@ -151,6 +176,27 @@ void PlayMode::update(float elapsed) {
 		if(!ball_collides_wall(new_position)) {
 			ball->position = new_position;
 		}
+	}
+
+	{
+
+		//combine inputs into a move:
+		constexpr float CameraSpeed = 30.0f;
+		glm::vec2 move = glm::vec2(0.0f);
+		if (a.pressed && !d.pressed) move.x =-1.0f;
+		if (!a.pressed && d.pressed) move.x = 1.0f;
+		if (s.pressed && !w.pressed) move.y =-1.0f;
+		if (!s.pressed && w.pressed) move.y = 1.0f;
+
+		//make it so that moving diagonally doesn't go faster:
+		if (move != glm::vec2(0.0f)) move = glm::normalize(move) * CameraSpeed * elapsed;
+
+		glm::mat4x3 frame = camera->transform->make_local_to_parent();
+		glm::vec3 frame_right = frame[0];
+		//glm::vec3 up = frame[1];
+		glm::vec3 frame_forward = -frame[2];
+
+		camera->transform->position += move.x * frame_right + move.y * frame_forward;
 	}
 
 	//reset button press counters:
